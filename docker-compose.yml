@@ -10,31 +10,35 @@ services:
     volumes:
       - ./node:/usr/src/app
     networks:
-      - node-network
+      - internal
 
   nginx:
-    build: ./nginx
+    image: nginx:alpine
+    container_name: nginx_server
     ports:
       - "8080:80"
-    networks: 
-      - node-network
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/logs:/var/log/nginx
     depends_on:
       - app
+    networks:
+      - internal
   
-  db:
-    image: mysql:5.7
-    container_name: db
-    restart: always
-    tty: true
-    volumes:
-      - ./mysql:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=nodedb
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=welles
-    networks: 
-      - node-network
+  # db:
+  #   image: mysql:5.7
+  #   container_name: db
+  #   restart: always
+  #   tty: true
+  #   volumes:
+  #     - ./mysql:/var/lib/mysql
+  #   environment:
+  #     - MYSQL_DATABASE=nodedb
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_USER=welles
+  #   networks: 
+  #     - node-network
 
 networks:
-  node-network:
+  internal:
     driver: bridge
