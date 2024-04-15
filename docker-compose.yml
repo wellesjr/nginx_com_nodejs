@@ -1,34 +1,40 @@
 version: '3'
 services:
-  db:
-    image: mysql:5.7
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-
   app:
-    build: ./app
-    command: npm start
-    volumes:
-      - .:/usr/src/app
+    build: 
+      context: ./node
+    container_name: app
+    tty: true
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      DATABASE_HOST: db
+    volumes:
+      - ./node:/usr/src/app
+    networks:
+      - node-network
 
   nginx:
     build: ./nginx
     ports:
       - "8080:80"
+    networks: 
+      - node-network
     depends_on:
       - app
+  
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=welles
+    networks: 
+      - node-network
 
-volumes:
-  db_data:
+networks:
+  node-network:
+    driver: bridge
