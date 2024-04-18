@@ -1,29 +1,27 @@
-version: '3'
+version: '3.8'
 services:
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./node:/usr/src/app:ro
+    depends_on:
+      - app
+  
   app:
     build: 
       context: ./node
     container_name: app
-    tty: true
-    ports:
-      - "3000:3000"
     volumes:
       - ./node:/usr/src/app
-    networks:
-      - internal
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_server
     ports:
-      - "8080:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/logs:/var/log/nginx
-    depends_on:
-      - app
-    networks:
-      - internal
+      - "3000:3000"
+
   
   # db:
   #   image: mysql:5.7
@@ -39,6 +37,6 @@ services:
   #   networks: 
   #     - node-network
 
-networks:
-  internal:
-    driver: bridge
+# networks:
+#   internal:
+#     driver: bridge
