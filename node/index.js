@@ -23,7 +23,7 @@ connection.connect(err => {
   const sql = `INSERT INTO people (name) VALUES (?)`;
   connection.query(sql, [name], (err, result) => {
     if (err) throw err;
-    console.log("1 record inserted");
+    console.log("1 visitante inserido!");
   });
 });
 
