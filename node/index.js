@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 const config = {
   host: 'db',
@@ -15,9 +15,8 @@ const connection = mysql.createConnection(config);
 
 connection.connect(err => {
   if (err) {
-    return console.error('error connecting: ' + err.stack);
+    return console.error('error ao conectar: ' + err.stack);
   }
-  console.log('connected as id ' + connection.threadId);
 
   const name = "Visitante " + Date.now();
   const sql = `INSERT INTO people (name) VALUES (?)`;
