@@ -1,24 +1,39 @@
 const express = require('express');
+const mysql = require('mysql');
+
 const app = express();
 const port = 3000;
-// const config = {
-//     host: 'db',
-//     user: 'root',
-//     password: 'root',
-//     database: 'nodedb'
-// };
 
-// const mysql = require('mysql')
-// const connection = mysql.createConnection(config)
+const config = {
+  host: 'db',
+  user: 'root',
+  password: 'root',
+  database: 'nodedb'
+};
 
-// const sql = `INSERT INTO people(name) values('Welles Jr')`
-// connection.query(sql)
-// connection.end()
+const connection = mysql.createConnection(config);
+
+connection.connect(err => {
+  if (err) {
+    return console.error('error connecting: ' + err.stack);
+  }
+  console.log('connected as id ' + connection.threadId);
+
+  const name = "Visitante " + Date.now();
+  const sql = `INSERT INTO people (name) VALUES (?)`;
+  connection.query(sql, [name], (err, result) => {
+    if (err) throw err;
+    console.log("1 record inserted");
+  });
+});
 
 app.get('/', (req, res) => {
-    res.send('<h1>Bem-vindo ao Node.js!</h1>');
+  connection.query('SELECT name FROM people', (err, results) => {
+    if (err) throw err;
+    res.send('<h1>Full Cycle Rocks!</h1>' + results.map(r => `<p>${r.name}</p>`).join(''));
+  });
 });
 
 app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
