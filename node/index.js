@@ -6,7 +6,7 @@ const port = 8080;
 
 const config = {
   host: 'db',
-  user: 'root',
+  user: 'welles',
   password: 'root',
   database: 'nodedb'
 };

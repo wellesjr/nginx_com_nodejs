@@ -25,13 +25,14 @@ services:
   
   db:
     image: mysql:5.7
+    command: --innodb-use-native-aio=0
     container_name: db
     restart: always
     tty: true
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=root
+      - MYSQL_USER=welles
     volumes:
       - ./mysql:/var/lib/mysql
     networks:
