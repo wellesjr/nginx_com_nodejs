@@ -12,4 +12,4 @@ RUN apt-get update && \
 COPY . .
 EXPOSE 3000
 
-CMD ["dockerize", "-wait", "tcp://db:3306", "node", "index.js"]
+CMD ["dockerize", "-wait", "tcp://db:3306", "-timeout", "30s", "node", "index.js"]
