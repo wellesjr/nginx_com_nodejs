@@ -35,6 +35,7 @@ services:
       - MYSQL_USER=welles
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
     networks:
       - node-network
 
