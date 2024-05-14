@@ -2,11 +2,11 @@ const express = require('express');
 const mysql = require('mysql');
 
 const app = express();
-const port = 8080;
+const port = 3000;
 
 const config = {
   host: 'db',
-  user: 'welles',
+  user: 'root',
   password: 'root',
   database: 'nodedb'
 };
